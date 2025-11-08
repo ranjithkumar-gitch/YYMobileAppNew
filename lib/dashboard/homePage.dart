@@ -343,6 +343,9 @@ class _HomePageState extends State<HomePage>
 
   @override
   Widget build(BuildContext context) {
+    String firstLetter = userProfileData!['firstName'].isNotEmpty
+        ? userProfileData!['firstName'][0].toUpperCase()
+        : '';
     return Scaffold(
       key: scaffoldKey,
       appBar: AppBar(
@@ -354,13 +357,25 @@ class _HomePageState extends State<HomePage>
             onTap: () {
               scaffoldKey.currentState?.openDrawer();
             },
-            child: CircleAvatar(
-              radius: 35,
-              backgroundColor: Colors.white,
-              backgroundImage: userProfileData?['profilePic'] != null
-                  ? NetworkImage(userProfileData!['profilePic'])
-                  : const NetworkImage('https://via.placeholder.com/150'),
-            ),
+            child: userProfileData?['profilePic'].isNotEmpty
+                ? CircleAvatar(
+                    radius: 35,
+                    backgroundColor: Colors.white,
+                    backgroundImage:
+                        NetworkImage(userProfileData!['profilePic']))
+                : CircleAvatar(
+                    radius: 50, // Adjust size as needed
+                    backgroundColor: Colors.white, // Customize background color
+                    child: Text(
+                      userProfileData?['firstName'][0] ??
+                          '', // First letter of the name
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 24,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
           ),
         ),
         title: Text(

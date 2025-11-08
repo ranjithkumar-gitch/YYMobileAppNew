@@ -432,7 +432,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       contentPadding: const EdgeInsets.symmetric(
                           vertical: 14, horizontal: 14),
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30),
+                        borderRadius: BorderRadius.circular(10),
                         borderSide: const BorderSide(color: Colors.grey),
                       ),
                       prefixIcon: Padding(

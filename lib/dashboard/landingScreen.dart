@@ -384,17 +384,17 @@ class _LandingScreenState extends State<LandingScreen> {
                                     ),
                                   ),
                                 ),
-                                // Padding(
-                                //   padding: const EdgeInsets.all(8.0),
-                                //   child: Text(
-                                //     '₹$yatraCost/person',
-                                //     style: GoogleFonts.poppins(
-                                //       fontWeight: FontWeight.w400,
-                                //       // fontSize: 14,
-                                //       color: Colors.red,
-                                //     ),
-                                //   ),
-                                // ),
+                                Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '₹$yatraCost/person',
+                                    style: GoogleFonts.poppins(
+                                      fontWeight: FontWeight.w400,
+                                      // fontSize: 14,
+                                      color: Colors.red,
+                                    ),
+                                  ),
+                                ),
                               ],
                             ),
                           ],

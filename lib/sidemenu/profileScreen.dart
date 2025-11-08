@@ -289,14 +289,40 @@ class _ProfilePageState extends State<ProfilePage> {
               ? Column(
                   children: [
                     const SizedBox(height: 10),
-                    CircleAvatar(
-                      radius: 65.0,
-                      backgroundColor: Colors.grey,
-                      backgroundImage: NetworkImage(
-                        userProfileData?['profilePic'] ??
-                            'https://via.placeholder.com/150',
-                      ),
-                    ),
+                    userProfileData?['profilePic'].isNotEmpty
+                        ? CircleAvatar(
+                            radius: 35,
+                            backgroundColor: Colors.white,
+                            backgroundImage:
+                                NetworkImage(userProfileData!['profilePic']))
+                        : CircleAvatar(
+                            radius: 50, // Adjust size as needed
+                            backgroundColor:
+                                Colors.blue, // Customize background color
+                            child: Text(
+                              userProfileData?['firstName'][0] ??
+                                  '', // First letter of the name
+                              style: TextStyle(
+                                color: Colors.black,
+                                fontSize: 30,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ),
+                    // CircleAvatar(
+                    //   radius: 65.0,
+                    //   backgroundColor: Colors.grey,
+                    //   backgroundImage: NetworkImage(
+                    //     userProfileData?['profilePic'] ??
+                    //         'https://via.placeholder.com/150',
+                    //   ),
+                    // ),
+                    // const SizedBox(height: 10),
+                    // Text(userProfileData?['firstName'][0] ?? '',
+                    //     style: GoogleFonts.poppins(
+                    //         fontSize: 20,
+                    //         fontWeight: FontWeight.w600,
+                    //         color: Colors.black)),
                     const SizedBox(height: 10),
                     Padding(
                       padding: const EdgeInsets.all(15.0),
