@@ -1,4 +1,4 @@
-package com.example.yymobileappnew
+package com.sunkpo.yogayatramobile
 
 import io.flutter.embedding.android.FlutterActivity
 

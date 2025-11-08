@@ -41,46 +41,46 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyCfyWA8araxhVHrkxrk4PYX-OMyDmasz-s',
-    appId: '1:155284277656:web:6d76d2403ce8a06cf483ed',
-    messagingSenderId: '155284277656',
-    projectId: 'yogayatra-72d32',
-    authDomain: 'yogayatra-72d32.firebaseapp.com',
-    storageBucket: 'yogayatra-72d32.appspot.com',
+    apiKey: 'AIzaSyA3m47a97cWxPXDkmNzQip71JVL4awn5KI',
+    appId: '1:577520367716:web:6e05bce0e540c2ead04771',
+    messagingSenderId: '577520367716',
+    projectId: 'yogayatra',
+    authDomain: 'yogayatra.firebaseapp.com',
+    storageBucket: 'yogayatra.firebasestorage.app',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDvGbkqqUhHAbxJkti6ejsJ6TeOqEqHUto',
-    appId: '1:155284277656:android:0ad16104f80b6dc3f483ed',
-    messagingSenderId: '155284277656',
-    projectId: 'yogayatra-72d32',
-    storageBucket: 'yogayatra-72d32.appspot.com',
+    apiKey: 'AIzaSyCQcUMY0MyjSxU2ibaEVIHTRES38rpP4n0',
+    appId: '1:577520367716:android:802af511e97b7b60d04771',
+    messagingSenderId: '577520367716',
+    projectId: 'yogayatra',
+    storageBucket: 'yogayatra.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyClY4Hdkgx-n-95BuSFfx-d7ruab6d9_Fc',
-    appId: '1:155284277656:ios:7054f47603d93719f483ed',
-    messagingSenderId: '155284277656',
-    projectId: 'yogayatra-72d32',
-    storageBucket: 'yogayatra-72d32.appspot.com',
-    iosBundleId: 'com.example.yogayatra',
+    apiKey: 'AIzaSyA7jqh2mb_MeHcjfb3K6uPqAJjiY0zyz8E',
+    appId: '1:577520367716:ios:a83f510d2e421b3fd04771',
+    messagingSenderId: '577520367716',
+    projectId: 'yogayatra',
+    storageBucket: 'yogayatra.firebasestorage.app',
+    iosBundleId: 'com.sunkpo.yogayatramobile',
   );
 
   static const FirebaseOptions macos = FirebaseOptions(
-    apiKey: 'AIzaSyClY4Hdkgx-n-95BuSFfx-d7ruab6d9_Fc',
-    appId: '1:155284277656:ios:7054f47603d93719f483ed',
-    messagingSenderId: '155284277656',
-    projectId: 'yogayatra-72d32',
-    storageBucket: 'yogayatra-72d32.appspot.com',
-    iosBundleId: 'com.example.yogayatra',
+    apiKey: 'AIzaSyA7jqh2mb_MeHcjfb3K6uPqAJjiY0zyz8E',
+    appId: '1:577520367716:ios:a83f510d2e421b3fd04771',
+    messagingSenderId: '577520367716',
+    projectId: 'yogayatra',
+    storageBucket: 'yogayatra.firebasestorage.app',
+    iosBundleId: 'com.sunkpo.yogayatramobile',
   );
 
   static const FirebaseOptions windows = FirebaseOptions(
-    apiKey: 'AIzaSyCfyWA8araxhVHrkxrk4PYX-OMyDmasz-s',
-    appId: '1:155284277656:web:ea6522823e8c00c8f483ed',
-    messagingSenderId: '155284277656',
-    projectId: 'yogayatra-72d32',
-    authDomain: 'yogayatra-72d32.firebaseapp.com',
-    storageBucket: 'yogayatra-72d32.appspot.com',
+    apiKey: 'AIzaSyA3m47a97cWxPXDkmNzQip71JVL4awn5KI',
+    appId: '1:577520367716:web:d8b407ba06818e6fd04771',
+    messagingSenderId: '577520367716',
+    projectId: 'yogayatra',
+    authDomain: 'yogayatra.firebaseapp.com',
+    storageBucket: 'yogayatra.firebasestorage.app',
   );
 }

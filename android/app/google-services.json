@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "577520367716",
+    "project_id": "yogayatra",
+    "storage_bucket": "yogayatra.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577520367716:android:c3d412e61901bc86d04771",
+        "android_client_info": {
+          "package_name": "com.sunkpo.yogayatra"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQcUMY0MyjSxU2ibaEVIHTRES38rpP4n0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:577520367716:android:802af511e97b7b60d04771",
+        "android_client_info": {
+          "package_name": "com.sunkpo.yogayatramobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCQcUMY0MyjSxU2ibaEVIHTRES38rpP4n0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
