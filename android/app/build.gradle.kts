@@ -9,7 +9,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.yymobileappnew"
+    namespace = "com.sunkpo.yogayatramobile"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = "27.0.12077973"
 
