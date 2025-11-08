@@ -273,17 +273,17 @@ class _LoginScreenState extends State<LoginScreen> {
       e164Key: "");
 
   /// Fetch unique deviceId for multi-login restriction
-  Future<String> _getDeviceId() async {
-    DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-    if (await deviceInfo.deviceInfo is AndroidDeviceInfo) {
-      AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-      return androidInfo.id!;
-    } else if (await deviceInfo.deviceInfo is IosDeviceInfo) {
-      IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-      return iosInfo.identifierForVendor!;
-    }
-    throw Exception("Unsupported platform for unique device ID");
-  }
+  // Future<String> _getDeviceId() async {
+  //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
+  //   if (await deviceInfo.deviceInfo is AndroidDeviceInfo) {
+  //     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
+  //     return androidInfo.id!;
+  //   } else if (await deviceInfo.deviceInfo is IosDeviceInfo) {
+  //     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
+  //     return iosInfo.identifierForVendor!;
+  //   }
+  //   throw Exception("Unsupported platform for unique device ID");
+  // }
 
   /// Login without OTP, implement multi-login condition
   Future<void> _loginWithoutOtp() async {
@@ -326,22 +326,22 @@ class _LoginScreenState extends State<LoginScreen> {
       var userDoc = querySnapshot.docs.first;
       String userId = userDoc.id;
       Map<String, dynamic> userData = userDoc.data();
-      String currentDeviceId = await _getDeviceId();
+      // String currentDeviceId = await _getDeviceId();
 
       // Check multi-login condition
-      if (userData['loggedIn'] == true &&
-          userData['deviceId'] != currentDeviceId) {
-        Navigator.pop(context); // Close the progress dialog
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('User already logged in on another device!')),
-        );
-        return;
-      }
+      // if (userData['loggedIn'] == true &&
+      //     userData['deviceId'] != currentDeviceId) {
+      //   Navigator.pop(context); // Close the progress dialog
+      //   ScaffoldMessenger.of(context).showSnackBar(
+      //     SnackBar(content: Text('User already logged in on another device!')),
+      //   );
+      //   return;
+      // }
 
       // Update user document to mark logged in
       await _firestore.collection('users').doc(userId).update({
         'loggedIn': true,
-        'deviceId': currentDeviceId,
+        // 'deviceId': currentDeviceId,
       });
 
       // Save userId in SharedPreferences

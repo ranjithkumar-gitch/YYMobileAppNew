@@ -1475,92 +1475,92 @@ class _YatraInclusionExclusionState extends State<YatraInclusionExclusion> {
                     fontWeight: FontWeight.w600,
                   ),
                 ),
-                Icon(
-                  _isExpanded
-                      ? Icons.keyboard_arrow_up
-                      : Icons.keyboard_arrow_down,
-                  color: Colors.black,
-                ),
+                // Icon(
+                //   _isExpanded
+                //       ? Icons.keyboard_arrow_up
+                //       : Icons.keyboard_arrow_down,
+                //   color: Colors.black,
+                // ),
               ],
             ),
-            if (_isExpanded) ...[
-              const SizedBox(height: 10),
-              Container(
-                margin: const EdgeInsets.symmetric(horizontal: 10),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Inclusions',
-                      style: GoogleFonts.poppins(
-                        // fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.green,
-                      ),
+            // if (_isExpanded) ...[
+            const SizedBox(height: 10),
+            Container(
+              margin: const EdgeInsets.symmetric(horizontal: 10),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Inclusions',
+                    style: GoogleFonts.poppins(
+                      // fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.green,
                     ),
-                    const SizedBox(height: 5),
-                    ...widget.inclusions.map((point) => Column(
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green,
-                                  // size: 10,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Text(
-                                    point,
-                                    style: GoogleFonts.poppins(
-                                      // fontSize: 14,
-                                      color: Colors.black,
-                                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  ...widget.inclusions.map((point) => Column(
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                // size: 10,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  point,
+                                  style: GoogleFonts.poppins(
+                                    // fontSize: 14,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 5),
-                          ],
-                        )),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Exclusions',
-                      style: GoogleFonts.poppins(
-                        // fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                        color: Colors.red,
-                      ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 5),
+                        ],
+                      )),
+                  const SizedBox(height: 10),
+                  Text(
+                    'Exclusions',
+                    style: GoogleFonts.poppins(
+                      // fontSize: 14,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.red,
                     ),
-                    const SizedBox(height: 5),
-                    ...widget.exclusions.map((point) => Column(
-                          children: [
-                            Row(
-                              children: [
-                                const Icon(
-                                  Icons.check_circle,
-                                  color: Colors.green,
-                                  // size: 10,
-                                ),
-                                const SizedBox(width: 5),
-                                Expanded(
-                                  child: Text(
-                                    point,
-                                    style: GoogleFonts.poppins(
-                                      // fontSize: 14,
-                                      color: Colors.black,
-                                    ),
+                  ),
+                  const SizedBox(height: 5),
+                  ...widget.exclusions.map((point) => Column(
+                        children: [
+                          Row(
+                            children: [
+                              const Icon(
+                                Icons.check_circle,
+                                color: Colors.green,
+                                // size: 10,
+                              ),
+                              const SizedBox(width: 5),
+                              Expanded(
+                                child: Text(
+                                  point,
+                                  style: GoogleFonts.poppins(
+                                    // fontSize: 14,
+                                    color: Colors.black,
                                   ),
                                 ),
-                              ],
-                            ),
-                            const SizedBox(height: 8),
-                          ],
-                        )),
-                  ],
-                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 8),
+                        ],
+                      )),
+                ],
               ),
-            ],
+            ),
+
             const SizedBox(height: 5),
             const DottedLine(
               direction: Axis.horizontal,

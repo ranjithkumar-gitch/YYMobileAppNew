@@ -384,6 +384,8 @@ class _DashboardScreenState extends State<DashboardScreen>
             final title = yatra['yatraTitle'] ?? 'No Title';
 
             final date = yatra['depature'] ?? 'No Date';
+            final date2 = yatra['arrival'] ?? 'No Date';
+
             final status = yatra['status'] ?? 'No Status';
             final imageUrl =
                 (yatra['images'] != null && yatra['images'].isNotEmpty)
@@ -462,7 +464,7 @@ class _DashboardScreenState extends State<DashboardScreen>
                           ],
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 5.0),
+                          padding: const EdgeInsets.only(left: 10.0),
                           child: Text(
                             title,
                             style: GoogleFonts.poppins(
@@ -471,8 +473,12 @@ class _DashboardScreenState extends State<DashboardScreen>
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 5),
-                          child: Text('Date: $date'),
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text('Depature Date: $date'),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 10, bottom: 10),
+                          child: Text('Arrival Date: $date2'),
                         ),
                       ],
                     ),
