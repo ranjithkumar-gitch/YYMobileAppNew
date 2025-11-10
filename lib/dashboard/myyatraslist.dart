@@ -2,18 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:yogayatra/dashboard/dashboardScreen.dart';
 import 'package:yogayatra/dashboard/landingScreen.dart';
 import 'package:yogayatra/sidemenu/profileScreen.dart';
 import 'package:yogayatra/yatrafullDetails/yatraDetailsScreen.dart';
-import 'package:yogayatra/sharedpreferences/sharedpreferances.dart';
-import 'package:yogayatra/sidemenu/myYatraListDetailsScreen.dart';
 
-class DashboardScreen extends StatefulWidget {
+class MyYatrasListScreen extends StatefulWidget {
   @override
-  State<DashboardScreen> createState() => _DashboardScreenState();
+  State<MyYatrasListScreen> createState() => _MyYatrasListScreenState();
 }
 
-class _DashboardScreenState extends State<DashboardScreen> {
+class _MyYatrasListScreenState extends State<MyYatrasListScreen> {
   int _selectedIndex = 1;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
@@ -129,6 +128,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 );
               },
               child: Card(
+                color: Colors.white,
                 elevation: 4,
                 margin: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
                 child: Stack(
@@ -185,17 +185,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
                           child: Text(
                             title,
                             style: GoogleFonts.poppins(
-                              fontWeight: FontWeight.w500,
+                              color: Colors.green,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10),
-                          child: Text('Depature Date: $date'),
+                          child: Text(
+                            'Depature : $date',
+                            style: TextStyle(fontSize: 15),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(left: 10, bottom: 10),
-                          child: Text('Arrival Date: $date2'),
+                          child: Text(
+                            'Arrival      : $date2',
+                            style: TextStyle(fontSize: 15),
+                          ),
                         ),
                       ],
                     ),
@@ -211,7 +218,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
                         ),
                         child: Text(
                           status,
-                          style: const TextStyle(color: Colors.white),
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ),
                     ),
@@ -249,6 +259,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.white,
       key: scaffoldKey,
       body: Column(
         children: [
@@ -259,7 +270,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'My Yatras List',
+                  'My Yatras',
                   style: GoogleFonts.poppins(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,

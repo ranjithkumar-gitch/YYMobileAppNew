@@ -404,10 +404,10 @@ class _SideMenuScreenState extends State<SideMenuScreen> {
               ),
             ),
             onTap: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => MyYatraList()),
-              );
+              // Navigator.push(
+              //   context,
+              //   MaterialPageRoute(builder: (context) => MyYatraList()),
+              // );
             },
           ),
           // ListTile(

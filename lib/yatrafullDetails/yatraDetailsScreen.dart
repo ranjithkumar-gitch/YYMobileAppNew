@@ -15,6 +15,7 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
+import 'package:url_launcher/url_launcher.dart';
 import 'package:yogayatra/sharedpreferences/sharedpreferances.dart';
 
 import 'package:yogayatra/widgets/readmore.dart';
@@ -240,14 +241,28 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
     ];
 
     return Scaffold(
+      backgroundColor: Colors.white,
       appBar: AppBar(
-          leading: BackButton(color: Colors.white),
-          backgroundColor: Colors.green,
-          title: Text(
-            'Yatra Details',
-            style: GoogleFonts.poppins(
-                fontSize: 20, fontWeight: FontWeight.w500, color: Colors.white),
-          )),
+        leading: const BackButton(color: Colors.white),
+        backgroundColor: Colors.green,
+        title: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Yatra Details',
+              style: GoogleFonts.poppins(
+                fontSize: 20,
+                fontWeight: FontWeight.w500,
+                color: Colors.white,
+              ),
+            ),
+            IconButton(
+              onPressed: () {},
+              icon: const Icon(Icons.chat, color: Colors.white),
+            ),
+          ],
+        ),
+      ),
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -255,9 +270,9 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
             children: [
               Row(
                 children: [
-                  SizedBox(
-                    height: 20,
-                  )
+                  // SizedBox(
+                  //   height: 20,
+                  // )
                   // IconButton(
                   //     onPressed: () {
                   //       Navigator.pop(context);
@@ -457,9 +472,9 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
                     Text(
                       widget.yatraData['yatraTitle'] ?? 'Yatra Details',
                       style: GoogleFonts.poppins(
-                          color: Colors.black,
+                          color: Colors.green,
                           // fontSize: 16,
-                          fontWeight: FontWeight.w500),
+                          fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
                       height: 10,
@@ -542,240 +557,569 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
 
                     //  const  Divider(color: Colors.grey,thickness: 1.0,),
 
+                    // Container(
+                    //   decoration: BoxDecoration(
+                    //       borderRadius: BorderRadius.circular(10),
+                    //       border: Border.all(color: Colors.grey)),
+                    //   child: Column(
+                    //     children: [
+                    //       const SizedBox(
+                    //         height: 15,
+                    //       ),
+                    //       Container(
+                    //         margin: const EdgeInsets.only(right: 15, left: 15),
+                    //         child: Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //             Column(
+                    //               crossAxisAlignment: CrossAxisAlignment.center,
+                    //               children: [
+                    //                 const Icon(
+                    //                   Icons.departure_board,
+                    //                   color: Colors.green,
+                    //                 ),
+                    //                 Text(
+                    //                   'Starting',
+                    //                   style: GoogleFonts.poppins(
+                    //                       color: Colors.black,
+                    //                       // fontSize: 15,
+                    //                       fontWeight: FontWeight.w500),
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //                 Text(
+                    //                   widget.yatraData['yatraStarting'] ??
+                    //                       'N/A',
+                    //                   style: GoogleFonts.poppins(
+                    //                       color: Colors.grey.shade600,
+                    //                       fontSize: 14,
+                    //                       fontWeight: FontWeight.w400),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             Column(
+                    //               crossAxisAlignment: CrossAxisAlignment.center,
+                    //               children: [
+                    //                 const Icon(
+                    //                   Icons.location_on,
+                    //                   color: Colors.green,
+                    //                 ),
+                    //                 Text(
+                    //                   'Ending',
+                    //                   style: GoogleFonts.poppins(
+                    //                       color: Colors.black,
+                    //                       // fontSize: 15,
+                    //                       fontWeight: FontWeight.w500),
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //                 Text(
+                    //                   widget.yatraData['yatraEnding'] ?? 'N/A',
+                    //                   style: GoogleFonts.poppins(
+                    //                       color: Colors.grey.shade600,
+                    //                       // fontSize: 14,
+                    //                       fontWeight: FontWeight.w400),
+                    //                 ),
+                    //               ],
+                    //             )
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const SizedBox(
+                    //         height: 15,
+                    //       ),
+                    //       Container(
+                    //         margin: const EdgeInsets.only(right: 15, left: 15),
+                    //         child: Row(
+                    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //           children: [
+                    //             Column(
+                    //               crossAxisAlignment: CrossAxisAlignment.center,
+                    //               children: [
+                    //                 const Padding(
+                    //                   padding: EdgeInsets.only(right: 25),
+                    //                   child: Icon(
+                    //                     Icons.directions_bus,
+                    //                     color: Colors.green,
+                    //                   ),
+                    //                 ),
+                    //                 Text(
+                    //                   'Seats availabile',
+                    //                   style: GoogleFonts.poppins(
+                    //                       color: Colors.black,
+                    //                       // fontSize: 15,
+                    //                       fontWeight: FontWeight.w500),
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //                 Text(
+                    //                   widget.yatraData['maxSeats'] ?? 'N/A',
+                    //                   style: GoogleFonts.poppins(
+                    //                       color: Colors.grey.shade600,
+                    //                       // fontSize: 14,
+                    //                       fontWeight: FontWeight.w400),
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             Column(
+                    //               crossAxisAlignment: CrossAxisAlignment.center,
+                    //               children: [
+                    //                 const Icon(
+                    //                   Icons.currency_rupee,
+                    //                   color: Colors.green,
+                    //                 ),
+                    //                 Text(
+                    //                   'Pricing',
+                    //                   style: GoogleFonts.poppins(
+                    //                       color: Colors.black,
+                    //                       // fontSize: 15,
+                    //                       fontWeight: FontWeight.w500),
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //                 Row(
+                    //                   children: [
+                    //                     Icon(
+                    //                       Icons.currency_rupee,
+                    //                       color: Colors.grey.shade600,
+                    //                       // size: 15,
+                    //                     ),
+                    //                     Text(
+                    //                       widget.yatraData['yatraCost'] ??
+                    //                           'N/A',
+                    //                       style: GoogleFonts.poppins(
+                    //                           color: Colors.grey.shade600,
+                    //                           // fontSize: 14,
+                    //                           fontWeight: FontWeight.w400),
+                    //                     ),
+                    //                     Text(
+                    //                       'PP',
+                    //                       style: GoogleFonts.poppins(
+                    //                           color: Colors.grey.shade600,
+                    //                           // fontSize: 14,
+                    //                           fontWeight: FontWeight.w400),
+                    //                     )
+                    //                   ],
+                    //                 ),
+                    //               ],
+                    //             )
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const SizedBox(
+                    //         height: 20,
+                    //       ),
+                    //       Container(
+                    //         margin: const EdgeInsets.only(right: 15, left: 15),
+                    //         child: Column(
+                    //           children: [
+                    //             Row(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: [
+                    //                 const Padding(
+                    //                   padding: EdgeInsets.only(right: 20),
+                    //                   child: Icon(
+                    //                     Icons.calendar_month,
+                    //                     color: Colors.green,
+                    //                   ),
+                    //                 ),
+                    //                 Column(
+                    //                   children: [
+                    //                     Text(
+                    //                       'Depature date ',
+                    //                       style: GoogleFonts.poppins(
+                    //                           color: Colors.black,
+                    //                           // fontSize: 15,
+                    //                           fontWeight: FontWeight.w500),
+                    //                     ),
+                    //                     Text(
+                    //                       widget.yatraData['depature'] ?? 'N/A',
+                    //                       style: GoogleFonts.poppins(
+                    //                           color: Colors.grey.shade600,
+                    //                           // fontSize: 14,
+                    //                           fontWeight: FontWeight.w400),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //             SizedBox(
+                    //               height: 20,
+                    //             ),
+                    //             Row(
+                    //               mainAxisAlignment: MainAxisAlignment.center,
+                    //               children: [
+                    //                 const Padding(
+                    //                   padding: EdgeInsets.only(right: 20),
+                    //                   child: Icon(
+                    //                     Icons.calendar_month,
+                    //                     color: Colors.green,
+                    //                   ),
+                    //                 ),
+                    //                 Column(
+                    //                   children: [
+                    //                     Text(
+                    //                       'Arrival date ',
+                    //                       style: GoogleFonts.poppins(
+                    //                           color: Colors.black,
+                    //                           // fontSize: 15,
+                    //                           fontWeight: FontWeight.w500),
+                    //                     ),
+                    //                     Text(
+                    //                       widget.yatraData['arrival'] ?? 'N/A',
+                    //                       style: GoogleFonts.poppins(
+                    //                           color: Colors.grey.shade600,
+                    //                           // fontSize: 14,
+                    //                           fontWeight: FontWeight.w400),
+                    //                     ),
+                    //                   ],
+                    //                 ),
+                    //                 const SizedBox(
+                    //                   width: 5,
+                    //                 ),
+                    //               ],
+                    //             ),
+                    //           ],
+                    //         ),
+                    //       ),
+                    //       const SizedBox(
+                    //         height: 15,
+                    //       ),
+                    //     ],
+                    //   ),
+                    // ),
                     Container(
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 16, horizontal: 12),
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          border: Border.all(color: Colors.grey)),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: Colors.grey.shade300),
+                        color: Colors.white,
+                      ),
                       child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
-                          const SizedBox(
-                            height: 15,
+                          /// 🔹 Starting & Ending Section
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  const Icon(Icons.departure_board,
+                                      color: Colors.green, size: 28),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Starting',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.yatraData['yatraStarting'] ?? 'N/A',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                width: 1,
+                                height: 50,
+                                color: Colors.grey.shade300,
+                              ),
+                              Column(
+                                children: [
+                                  const Icon(Icons.location_on,
+                                      color: Colors.green, size: 28),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Ending',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  Text(
+                                    widget.yatraData['yatraEnding'] ?? 'N/A',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          Container(
-                            margin: const EdgeInsets.only(right: 15, left: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.departure_board,
-                                      color: Colors.green,
-                                    ),
-                                    Text(
-                                      'Starting',
+
+                          const SizedBox(height: 20),
+
+                          /// 🔹 Seats & Pricing Section
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                            children: [
+                              Column(
+                                children: [
+                                  const Icon(Icons.directions_bus,
+                                      color: Colors.green, size: 28),
+                                  const SizedBox(height: 6),
+                                  Center(
+                                    child: Text(
+                                      'Seats Available',
                                       style: GoogleFonts.poppins(
-                                          color: Colors.black,
-                                          // fontSize: 15,
-                                          fontWeight: FontWeight.w500),
+                                        fontSize: 12,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.grey,
+                                      ),
                                     ),
-                                    const SizedBox(
-                                      width: 5,
+                                  ),
+                                  Text(
+                                    widget.yatraData['maxSeats'] ?? 'N/A',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 14,
+                                      color: Colors.black,
                                     ),
-                                    Text(
-                                      widget.yatraData['yatraStarting'] ??
-                                          'N/A',
-                                      style: GoogleFonts.poppins(
+                                  ),
+                                ],
+                              ),
+                              Container(
+                                width: 1,
+                                height: 50,
+                                color: Colors.grey.shade300,
+                              ),
+                              Column(
+                                children: [
+                                  const Icon(Icons.currency_rupee,
+                                      color: Colors.green, size: 28),
+                                  const SizedBox(height: 6),
+                                  Text(
+                                    'Pricing',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 12,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.grey,
+                                    ),
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(Icons.currency_rupee,
                                           color: Colors.grey.shade600,
+                                          size: 16),
+                                      Text(
+                                        widget.yatraData['yatraCost'] ?? 'N/A',
+                                        style: GoogleFonts.poppins(
                                           fontSize: 14,
-                                          fontWeight: FontWeight.w400),
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                      Text(
+                                        ' /Person',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+
+                          const SizedBox(height: 20),
+
+                          /// 🔹 Dates Section
+                          Column(
+                            children: [
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.calendar_month,
+                                      color: Colors.green, size: 26),
+                                  const SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Departure Date',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      Text(
+                                        widget.yatraData['depature'] ?? 'N/A',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                              const SizedBox(height: 16),
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  const Icon(Icons.calendar_month,
+                                      color: Colors.green, size: 26),
+                                  const SizedBox(width: 10),
+                                  Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        'Arrival Date',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.grey,
+                                        ),
+                                      ),
+                                      Text(
+                                        widget.yatraData['arrival'] ?? 'N/A',
+                                        style: GoogleFonts.poppins(
+                                          fontSize: 14,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Text(
+                      'Coordinator details',
+                      style: GoogleFonts.poppins(
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600,
+                        color: Colors.black,
+                      ),
+                    ),
+                    Container(
+                      margin: const EdgeInsets.symmetric(
+                          vertical: 10, horizontal: 2),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(12),
+                        border:
+                            Border.all(color: Colors.grey.shade300, width: 1),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.grey.shade200,
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Text(
+                                      widget.yatraData['coordinatorName'] ??
+                                          'Rajendranath',
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 16,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ],
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.location_on,
+                              ),
+                              Row(
+                                children: [
+                                  InkWell(
+                                    onTap: () {
+                                      final phone =
+                                          widget.yatraData['coordinatorPhone'];
+                                      if (phone != null && phone.isNotEmpty) {
+                                        launchUrl(Uri.parse('tel:$phone'));
+                                      }
+                                    },
+                                    child: const Icon(
+                                      Icons.call,
+                                      color: Colors.red,
+                                      size: 22,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 12),
+                                  InkWell(
+                                    onTap: () {},
+                                    child: const Icon(
+                                      Icons.chat,
                                       color: Colors.green,
+                                      size: 22,
                                     ),
-                                    Text(
-                                      'Ending',
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.black,
-                                          // fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      widget.yatraData['yatraEnding'] ?? 'N/A',
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.grey.shade600,
-                                          // fontSize: 14,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            height: 15,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(right: 15, left: 15),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(right: 25),
-                                      child: Icon(
-                                        Icons.directions_bus,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    Text(
-                                      'Seats availabile',
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.black,
-                                          // fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      widget.yatraData['maxSeats'] ?? 'N/A',
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.grey.shade600,
-                                          // fontSize: 14,
-                                          fontWeight: FontWeight.w400),
-                                    ),
-                                  ],
+                          const SizedBox(height: 8),
+
+                          /// 🔹 Coordinator Mobile Number
+                          Row(
+                            children: [
+                              const Icon(Icons.phone_android,
+                                  color: Colors.grey, size: 18),
+                              const SizedBox(width: 8),
+                              Text(
+                                "+919999399993",
+                                style: GoogleFonts.poppins(
+                                  fontSize: 14,
+                                  color: Colors.grey.shade700,
                                 ),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.center,
-                                  children: [
-                                    const Icon(
-                                      Icons.currency_rupee,
-                                      color: Colors.green,
-                                    ),
-                                    Text(
-                                      'Pricing',
-                                      style: GoogleFonts.poppins(
-                                          color: Colors.black,
-                                          // fontSize: 15,
-                                          fontWeight: FontWeight.w500),
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                    Row(
-                                      children: [
-                                        Icon(
-                                          Icons.currency_rupee,
-                                          color: Colors.grey.shade600,
-                                          // size: 15,
-                                        ),
-                                        Text(
-                                          widget.yatraData['yatraCost'] ??
-                                              'N/A',
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.grey.shade600,
-                                              // fontSize: 14,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                        Text(
-                                          'PP',
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.grey.shade600,
-                                              // fontSize: 14,
-                                              fontWeight: FontWeight.w400),
-                                        )
-                                      ],
-                                    ),
-                                  ],
-                                )
-                              ],
-                            ),
+                              ),
+                            ],
                           ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          Container(
-                            margin: const EdgeInsets.only(right: 15, left: 15),
-                            child: Column(
-                              children: [
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(right: 20),
-                                      child: Icon(
-                                        Icons.calendar_month,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Depature date ',
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              // fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        Text(
-                                          widget.yatraData['depature'] ?? 'N/A',
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.grey.shade600,
-                                              // fontSize: 14,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                  ],
+                          const SizedBox(height: 6),
+
+                          /// 🔹 Coordinator Email
+                          Row(
+                            children: [
+                              const Icon(Icons.email,
+                                  color: Colors.grey, size: 18),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  "rajendranath@gmail.com" ?? 'N/A',
+                                  style: GoogleFonts.poppins(
+                                    fontSize: 14,
+                                    color: Colors.grey.shade700,
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
                                 ),
-                                SizedBox(
-                                  height: 20,
-                                ),
-                                Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    const Padding(
-                                      padding: EdgeInsets.only(right: 20),
-                                      child: Icon(
-                                        Icons.calendar_month,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                    Column(
-                                      children: [
-                                        Text(
-                                          'Arrival date ',
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.black,
-                                              // fontSize: 15,
-                                              fontWeight: FontWeight.w500),
-                                        ),
-                                        Text(
-                                          widget.yatraData['arrival'] ?? 'N/A',
-                                          style: GoogleFonts.poppins(
-                                              color: Colors.grey.shade600,
-                                              // fontSize: 14,
-                                              fontWeight: FontWeight.w400),
-                                        ),
-                                      ],
-                                    ),
-                                    const SizedBox(
-                                      width: 5,
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(
-                            height: 15,
+                              ),
+                            ],
                           ),
                         ],
                       ),
@@ -965,35 +1309,62 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
                     const SizedBox(
                       height: 15,
                     ),
-                    if (status == 'Registration Open' || status == 'New') ...[
-                      SizedBox(
-                        width: double.infinity,
-                        height: 45,
-                        child: ElevatedButton(
-                          onPressed:
-                              isInterested ? _removeInterest : _submitInterest,
-                          style: ElevatedButton.styleFrom(
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            backgroundColor:
-                                isInterested ? Colors.red : Colors.green,
+                    // if (status == 'Registration Open' || status == 'New') ...[
+                    //   SizedBox(
+                    //     width: double.infinity,
+                    //     height: 45,
+                    //     child: ElevatedButton(
+                    //       onPressed:
+                    //           isInterested ? _removeInterest : _submitInterest,
+                    //       style: ElevatedButton.styleFrom(
+                    //         shape: RoundedRectangleBorder(
+                    //           borderRadius: BorderRadius.circular(5),
+                    //         ),
+                    //         backgroundColor:
+                    //             isInterested ? Colors.red : Colors.green,
+                    //       ),
+                    //       child: Text(
+                    //         isInterested
+                    //             ? "I am not interested"
+                    //             : "I am interested",
+                    //         style: GoogleFonts.poppins(
+                    //           color: Colors.white,
+                    //           fontWeight: FontWeight.w500,
+                    //           fontSize: 16,
+                    //         ),
+                    //       ),
+                    //     ),
+                    //   ),
+                    //   const SizedBox(height: 15),
+                    // ] else
+                    //   const SizedBox.shrink(),
+                    SizedBox(
+                      width: double.infinity,
+                      height: 45,
+                      child: ElevatedButton(
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(5),
                           ),
-                          child: Text(
-                            isInterested
-                                ? "I am not interested"
-                                : "I am interested",
-                            style: GoogleFonts.poppins(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w500,
-                              fontSize: 16,
-                            ),
+                          backgroundColor: Colors.green,
+                        ),
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) => MapViewScreen()),
+                          );
+                        },
+                        child: Text(
+                          'View Payment Details',
+                          style: GoogleFonts.poppins(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 16,
                           ),
                         ),
                       ),
-                      const SizedBox(height: 15),
-                    ] else
-                      const SizedBox.shrink(),
+                    ),
                     ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         shape: RoundedRectangleBorder(
@@ -1022,33 +1393,7 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
                       ),
                     ),
                     const SizedBox(height: 5),
-                    SizedBox(
-                      width: double.infinity,
-                      height: 45,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(5),
-                          ),
-                          backgroundColor: Colors.green,
-                        ),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => MapViewScreen()),
-                          );
-                        },
-                        child: Text(
-                          'View Map',
-                          style: GoogleFonts.poppins(
-                            color: Colors.white,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 16,
-                          ),
-                        ),
-                      ),
-                    ),
+
                     const SizedBox(height: 15),
                   ],
                 ),

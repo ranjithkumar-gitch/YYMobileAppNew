@@ -214,7 +214,9 @@ import 'package:motion_tab_bar_v2/motion-tab-bar.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:yogayatra/dashboard/dashboardScreen.dart';
 import 'package:yogayatra/dashboard/landingScreen.dart';
+import 'package:yogayatra/dashboard/myyatraslist.dart';
 import 'package:yogayatra/dashboard/notificationPage.dart';
+import 'package:yogayatra/sidemenu/myTayraList.dart' hide DashboardScreen;
 import 'package:yogayatra/sidemenu/profileScreen.dart';
 import 'package:yogayatra/sidemenu/sidemenusScreen.dart';
 
@@ -409,15 +411,15 @@ class _HomePageState extends State<HomePage>
       body: TabBarView(
         controller: _tabController,
         children: [
-          LandingScreen(),
+          MyYatrasListScreen(),
           DashboardScreen(),
           ProfilePage(),
         ],
       ),
       bottomNavigationBar: MotionTabBar(
-        initialSelectedTab: "Home",
-        labels: const ["Home", "All Yatras", "Profile"],
-        icons: const [Icons.home, Icons.temple_hindu, Icons.person],
+        initialSelectedTab: "My Yatras",
+        labels: const ["My Yatras", "All Yatras", "Profile"],
+        icons: const [Icons.temple_hindu, Icons.temple_hindu, Icons.person],
         tabSize: 50,
         tabBarHeight: 60,
         textStyle: const TextStyle(
