@@ -13,14 +13,13 @@ class Otp_screen extends StatefulWidget {
 class _Otp_screenState extends State<Otp_screen> {
   final TextEditingController _otpController = TextEditingController();
 
-  // Simulate OTP verification process
   Future<void> _verifyOtp() async {
     // Show progress bar
     showDialog(
       context: context,
       barrierDismissible: false,
       builder: (context) {
-        return Center(
+        return const Center(
           child: CircularProgressIndicator(
             valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
           ),
@@ -28,22 +27,19 @@ class _Otp_screenState extends State<Otp_screen> {
       },
     );
 
-    await Future.delayed(Duration(seconds: 2)); // Simulate network delay
+    await Future.delayed(const Duration(seconds: 2)); // Simulate network delay
 
+    if (!mounted) return; // ✅ prevent null check error
     Navigator.pop(context); // Close progress bar
 
     if (_otpController.text == '123456') {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(),
-        ),
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Invalid OTP'),
-        ),
+        const SnackBar(content: Text('Invalid OTP')),
       );
     }
   }

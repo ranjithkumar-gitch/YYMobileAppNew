@@ -17,6 +17,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:http/http.dart' as http;
 import 'package:url_launcher/url_launcher.dart';
 import 'package:yogayatra/sharedpreferences/sharedpreferances.dart';
+import 'package:yogayatra/viewpaymentdetails.dart';
 
 import 'package:yogayatra/widgets/readmore.dart';
 import 'package:flutter_quill/flutter_quill.dart';
@@ -1352,7 +1353,7 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                                builder: (context) => MapViewScreen()),
+                                builder: (context) => PaymentDetailsScreen()),
                           );
                         },
                         child: Text(
