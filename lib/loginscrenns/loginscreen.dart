@@ -31,20 +31,6 @@ class _LoginScreenState extends State<LoginScreen> {
       displayNameNoCountryCode: "IN",
       e164Key: "");
 
-  /// Fetch unique deviceId for multi-login restriction
-  // Future<String> _getDeviceId() async {
-  //   DeviceInfoPlugin deviceInfo = DeviceInfoPlugin();
-  //   if (await deviceInfo.deviceInfo is AndroidDeviceInfo) {
-  //     AndroidDeviceInfo androidInfo = await deviceInfo.androidInfo;
-  //     return androidInfo.id!;
-  //   } else if (await deviceInfo.deviceInfo is IosDeviceInfo) {
-  //     IosDeviceInfo iosInfo = await deviceInfo.iosInfo;
-  //     return iosInfo.identifierForVendor!;
-  //   }
-  //   throw Exception("Unsupported platform for unique device ID");
-  // }
-
-  /// Login without OTP, implement multi-login condition
   Future<void> _loginWithoutOtp() async {
     final phoneNumber = _phoneController.text.trim();
 
@@ -55,7 +41,6 @@ class _LoginScreenState extends State<LoginScreen> {
       return;
     }
 
-    // Show progress dialog
     showDialog(
       context: context,
       barrierDismissible: false,
@@ -67,21 +52,19 @@ class _LoginScreenState extends State<LoginScreen> {
     );
 
     try {
-      // Query Firestore for user data
       var querySnapshot = await _firestore
           .collection('users')
           .where('mobileNumber', isEqualTo: phoneNumber)
           .get();
 
       if (querySnapshot.docs.isEmpty) {
-        Navigator.pop(context); // Close the progress dialog
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(content: Text('Phone number not registered')),
         );
         return;
       }
 
-      // Get the user document and deviceId
       var userDoc = querySnapshot.docs.first;
       String userId = userDoc.id;
       Map<String, dynamic> userData = userDoc.data();
@@ -97,28 +80,23 @@ class _LoginScreenState extends State<LoginScreen> {
       //   return;
       // }
 
-      // Update user document to mark logged in
-      await _firestore.collection('users').doc(userId).update({
-        'loggedIn': true,
-        // 'deviceId': currentDeviceId,
-      });
+      // await _firestore.collection('users').doc(userId).update({
+      //   'loggedIn': true,
+      //   // 'deviceId': currentDeviceId,
+      // });
 
-      // Save userId in SharedPreferences
       SharedPreferences prefs = await SharedPreferences.getInstance();
       await prefs.setString('userId', userId);
       await prefs.setString('mobileNumber', phoneNumber);
 
-      Navigator.pop(context); // Close the progress dialog
+      Navigator.pop(context);
 
-      // Navigate to the dashboard or OTP screen
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-            builder: (context) =>
-                Otp_screen()), // Replace with actual destination
+        MaterialPageRoute(builder: (context) => Otp_screen()),
       );
     } catch (e) {
-      Navigator.pop(context); // Close the progress dialog in case of error
+      Navigator.pop(context);
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error occurred: $e')),
       );

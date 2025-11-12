@@ -52,17 +52,14 @@ class _YatraDetailsAndTransactionsScreenState
   // }
   Future<void> _fetchTransactions() async {
     try {
-      // Fetch userId from Shared Preferences
-      await SharedPrefServices
-          .init(); // Ensure shared preferences are initialized
-      final userId = SharedPrefServices.getuserId().toString();
+      await SharedPrefServices.init();
+      final userId = SharedPrefServices.getUserId().toString();
 
       if (userId.isEmpty) {
         print('User ID not found in shared preferences.');
         return;
       }
 
-      // Fetch transactions where travellerId matches the userId
       QuerySnapshot transactionSnapshot = await FirebaseFirestore.instance
           .collection('transactions')
           // .where('yatraId', isEqualTo: widget.yatraId) // Match yatraId

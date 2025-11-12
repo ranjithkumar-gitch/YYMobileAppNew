@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:yogayatra/yatrafullDetails/yatraDetailsScreen.dart';
 import 'package:intl/intl.dart';
 import 'package:yogayatra/sharedpreferences/sharedpreferances.dart';
-import 'package:yogayatra/yatrafullDetails/yatraDetailsScreen.dart';
 
-class MyYatrasListScreen extends StatefulWidget {
-  const MyYatrasListScreen({Key? key}) : super(key: key);
+class AllYatrasList extends StatefulWidget {
+  const AllYatrasList({Key? key}) : super(key: key);
 
   @override
-  _MyYatrasListScreenState createState() => _MyYatrasListScreenState();
+  _AllYatrasListState createState() => _AllYatrasListState();
 }
 
-class _MyYatrasListScreenState extends State<MyYatrasListScreen> {
+class _AllYatrasListState extends State<AllYatrasList> {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   List<Map<String, dynamic>> _yatraDetails = [];
   bool _loading = true;
@@ -25,16 +25,11 @@ class _MyYatrasListScreenState extends State<MyYatrasListScreen> {
 
   Future<void> _fetchYatrasForLoggedInUser() async {
     await SharedPrefServices.init();
-    List<String> myYatras = SharedPrefServices.getMyYatras() ?? [];
 
-    if (myYatras.isEmpty) {
-      setState(() => _loading = false);
-      return;
-    }
+    setState(() => _loading = true);
 
     try {
-      Query query = _firestore.collection('yatras').where('yatraId',
-          whereIn: myYatras.length > 10 ? myYatras.sublist(0, 10) : myYatras);
+      Query query = _firestore.collection('yatras');
 
       if (_selectedStatus != null && _selectedStatus!.isNotEmpty) {
         query = query.where('status', isEqualTo: _selectedStatus);
@@ -49,7 +44,7 @@ class _MyYatrasListScreenState extends State<MyYatrasListScreen> {
         _loading = false;
       });
     } catch (e) {
-      debugPrint(" Error fetching yatras: $e");
+      debugPrint("Error fetching yatras: $e");
       setState(() => _loading = false);
     }
   }
@@ -80,7 +75,7 @@ class _MyYatrasListScreenState extends State<MyYatrasListScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'My Yatras',
+                  'All Yatras',
                   style: GoogleFonts.poppins(
                     fontSize: 18,
                     fontWeight: FontWeight.w600,
@@ -432,258 +427,3 @@ class _MyYatrasListScreenState extends State<MyYatrasListScreen> {
     );
   }
 }
-// import 'package:flutter/material.dart';
-// import 'package:google_fonts/google_fonts.dart';
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:shared_preferences/shared_preferences.dart';
-// import 'package:yogayatra/sharedpreferences/sharedpreferances.dart';
-
-// class MyYatrasListScreen extends StatefulWidget {
-//   const MyYatrasListScreen({Key? key}) : super(key: key);
-
-//   @override
-//   _MyYatrasListScreenState createState() => _MyYatrasListScreenState();
-// }
-
-// class _MyYatrasListScreenState extends State<MyYatrasListScreen> {
-//   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-//   String? _selectedStatus;
-//   List<Map<String, dynamic>> _yatraDetails = [];
-//   bool _loading = true;
-
-//   @override
-//   void initState() {
-//     super.initState();
-//     _fetchTravellerYatras();
-//   }
-
-//   Stream<QuerySnapshot> _getFilteredYatras() {
-//     final List<String> defaultStatusFilter = [
-//       'Draft',
-//       'New',
-//       'Registration Open',
-//       'Ongoing',
-//       'Registration Closed',
-//       'Completed',
-//       'Postponed',
-//       'Cancelled'
-//     ];
-
-//     Query query = _firestore
-//         .collection('yatras')
-//         .where('status', whereIn: defaultStatusFilter)
-//       ..orderBy('depature', descending: false);
-
-//     if (_selectedStatus != null) {
-//       query = query.where('status', isEqualTo: _selectedStatus);
-//     }
-
-//     return query.snapshots();
-//   }
-
-//   Future<void> _fetchTravellerYatras() async {
-//     final userId = SharedPrefServices.getDocumentId().toString();
-
-//     try {
-//       final travellerSnapshot = await _firestore
-//           .collection('travellers')
-//           .where('docIds', arrayContains: userId)
-//           .get();
-
-//       if (travellerSnapshot.docs.isEmpty) {
-//         setState(() => _loading = false);
-//         return;
-//       }
-
-//       List<Map<String, dynamic>> yatras = [];
-
-//       for (var travellerDoc in travellerSnapshot.docs) {
-//         final travellerData = travellerDoc.data();
-//         final yatraId = travellerData['yatraId'];
-
-//         if (yatraId != null) {
-//           final yatraSnapshot = await _firestore
-//               .collection('yatras')
-//               .where('yatraId', isEqualTo: yatraId)
-//               .get();
-
-//           if (yatraSnapshot.docs.isNotEmpty) {
-//             final yatraData = yatraSnapshot.docs.first.data();
-//             yatras.add(yatraData);
-//           }
-//         }
-//       }
-
-//       setState(() {
-//         _yatraDetails = yatras;
-//         _loading = false;
-//       });
-//     } catch (e) {
-//       print("Error fetching Yatras: $e");
-//       setState(() => _loading = false);
-//     }
-//   }
-
-//   Color getStatusBackgroundColor(String status) {
-//     switch (status.toLowerCase()) {
-//       case 'registration open':
-//         return Colors.green;
-//       case 'registration closed':
-//         return Colors.red;
-//       default:
-//         return Colors.grey;
-//     }
-//   }
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: _loading
-//           ? const Center(child: CircularProgressIndicator())
-//           : _yatraDetails.isEmpty
-//               ? const Center(child: Text('No Yatras found'))
-//               : ListView.builder(
-//                   itemCount: _yatraDetails.length,
-//                   itemBuilder: (context, index) {
-//                     final yatra = _yatraDetails[index];
-//                     final imageUrl =
-//                         (yatra['images'] != null && yatra['images'].isNotEmpty)
-//                             ? yatra['images'][0]
-//                             : 'https://via.placeholder.com/400';
-//                     final title = yatra['yatraTitle'] ?? 'Unknown Yatra';
-//                     final cost = yatra['yatraCost'] ?? '0';
-//                     final date = yatra['depature'] ?? 'N/A';
-//                     final date2 = yatra['arrival'] ?? 'N/A';
-//                     final status = yatra['status'] ?? 'N/A';
-
-//                     return Column(
-//                       children: [
-//                         Container(
-//                           color: Colors.white,
-//                           padding: const EdgeInsets.symmetric(
-//                               horizontal: 16, vertical: 8),
-//                           child: Row(
-//                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-//                             children: [
-//                               Text(
-//                                 'My Yatras',
-//                                 style: GoogleFonts.poppins(
-//                                   fontSize: 18,
-//                                   fontWeight: FontWeight.w600,
-//                                   color: Colors.green,
-//                                 ),
-//                               ),
-//                               _buildFilterButton(),
-//                             ],
-//                           ),
-//                         ),
-//                         Card(
-//                           color: Colors.white,
-//                           elevation: 4,
-//                           margin: const EdgeInsets.symmetric(
-//                               vertical: 8, horizontal: 16),
-//                           child: Stack(
-//                             children: [
-//                               Column(
-//                                 crossAxisAlignment: CrossAxisAlignment.start,
-//                                 children: [
-//                                   Image.network(
-//                                     imageUrl,
-//                                     height: 150,
-//                                     width: double.infinity,
-//                                     fit: BoxFit.cover,
-//                                   ),
-//                                   Row(
-//                                     mainAxisAlignment:
-//                                         MainAxisAlignment.spaceBetween,
-//                                     children: [
-//                                       Expanded(
-//                                         child: Padding(
-//                                           padding:
-//                                               const EdgeInsets.only(left: 5.0),
-//                                           child: Text(
-//                                             yatra['yatraId'] ?? '',
-//                                             style: GoogleFonts.poppins(
-//                                               fontWeight: FontWeight.w500,
-//                                               color: Colors.green,
-//                                             ),
-//                                             overflow: TextOverflow.ellipsis,
-//                                           ),
-//                                         ),
-//                                       ),
-//                                       Padding(
-//                                         padding: const EdgeInsets.all(8.0),
-//                                         child: Row(
-//                                           mainAxisSize: MainAxisSize.min,
-//                                           children: [
-//                                             const Icon(
-//                                               Icons.currency_rupee,
-//                                               size: 16,
-//                                               color: Colors.red,
-//                                             ),
-//                                             Text(
-//                                               '$cost /person',
-//                                               style: GoogleFonts.poppins(
-//                                                 fontWeight: FontWeight.w500,
-//                                                 color: Colors.red,
-//                                               ),
-//                                             ),
-//                                           ],
-//                                         ),
-//                                       ),
-//                                     ],
-//                                   ),
-//                                   Padding(
-//                                     padding: const EdgeInsets.only(left: 10.0),
-//                                     child: Text(
-//                                       title,
-//                                       style: GoogleFonts.poppins(
-//                                         fontWeight: FontWeight.w700,
-//                                         color: Colors.green,
-//                                       ),
-//                                     ),
-//                                   ),
-//                                   Padding(
-//                                     padding: const EdgeInsets.only(left: 10),
-//                                     child: Text(
-//                                       'Departure Date: $date',
-//                                       style: const TextStyle(fontSize: 15),
-//                                     ),
-//                                   ),
-//                                   Padding(
-//                                     padding: const EdgeInsets.only(
-//                                         left: 10, bottom: 10),
-//                                     child: Text(
-//                                       'Arrival Date: $date2',
-//                                       style: const TextStyle(fontSize: 15),
-//                                     ),
-//                                   ),
-//                                 ],
-//                               ),
-//                               Positioned(
-//                                 top: 8,
-//                                 right: 8,
-//                                 child: Container(
-//                                   padding: const EdgeInsets.symmetric(
-//                                       horizontal: 10, vertical: 5),
-//                                   decoration: BoxDecoration(
-//                                     color: getStatusBackgroundColor(status),
-//                                     borderRadius: BorderRadius.circular(5),
-//                                   ),
-//                                   child: Text(
-//                                     status,
-//                                     style: const TextStyle(color: Colors.white),
-//                                   ),
-//                                 ),
-//                               ),
-//                             ],
-//                           ),
-//                         ),
-//                       ],
-//                     );
-//                   },
-//                 ),
-//     );
-//   }
-
-// }

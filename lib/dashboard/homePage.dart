@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_tab_bar_v2/motion-tab-bar.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yogayatra/dashboard/dashboardScreen.dart';
-
+import 'package:yogayatra/dashboard/advst_screen.dart';
+import 'package:yogayatra/dashboard/allyatraslist.dart';
 import 'package:yogayatra/dashboard/myyatraslist.dart';
 import 'package:yogayatra/dashboard/notificationPage.dart';
-
-import 'package:yogayatra/sidemenu/profileScreen.dart';
+import 'package:yogayatra/sharedpreferences/sharedpreferances.dart';
 import 'package:yogayatra/sidemenu/sidemenusScreen.dart';
 
 class HomePage extends StatefulWidget {
@@ -21,235 +18,61 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage>
     with SingleTickerProviderStateMixin {
   final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
-
   late TabController _tabController;
-  Map<String, dynamic>? userProfileData;
+
+  late final String firstName;
+  late final String lastName;
+  late final String profilePic;
+  late final String creditNote;
+  late final String mobileNumber;
+  late final String gender;
+  late final String userId;
 
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 3, vsync: this); // 3 tabs
-    _getUserId(); // Fetch user ID dynamically
+    _tabController = TabController(length: 3, vsync: this);
+
+    firstName = SharedPrefServices.getFirstName() ?? '';
+    lastName = SharedPrefServices.getLastName() ?? '';
+    profilePic = SharedPrefServices.getProfilePic() ?? '';
+    creditNote = SharedPrefServices.getCreditNote() ?? '0.00';
+    mobileNumber = SharedPrefServices.getMobileNumber() ?? '';
+    gender = SharedPrefServices.getGender() ?? '';
+    userId = SharedPrefServices.getUserId() ?? '';
   }
 
-  // Fetch user ID dynamically from SharedPreferences
-  Future<void> _getUserId() async {
-    try {
-      SharedPreferences prefs = await SharedPreferences.getInstance();
-      String? userId = prefs.getString('userId');
-
-      if (userId != null) {
-        _fetchUserProfileData(userId);
-      } else {
-        print("User ID not found in SharedPreferences.");
-      }
-    } catch (e) {
-      print("Error fetching user ID: $e");
-    }
-  }
-
-  // Fetch user profile data from Firestore using userId
-  Future<void> _fetchUserProfileData(String userId) async {
-    try {
-      final docSnapshot = await FirebaseFirestore.instance
-          .collection('users') // Firestore collection name
-          .doc(userId) // User ID
-          .get();
-
-      if (docSnapshot.exists) {
-        setState(() {
-          userProfileData = docSnapshot.data() as Map<String, dynamic>;
-        });
-      } else {
-        print("User document does not exist.");
-      }
-    } catch (e) {
-      print("Error fetching user profile data: $e");
-    }
-  }
-
-  // Display wallet balance in an alert dialog
   void _showCreditDialog() {
-    if (userProfileData != null) {
-      double creditNote = double.tryParse(
-              userProfileData?['creditNote']?.toString() ?? '0.00') ??
-          0.00;
+    double credit =
+        double.tryParse(creditNote.isNotEmpty ? creditNote : '0.00') ?? 0.00;
 
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              'Your Wallet Amount',
-              style: GoogleFonts.poppins(
-                  fontSize: 20, fontWeight: FontWeight.bold),
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(
+            'Your Wallet Amount',
+            style:
+                GoogleFonts.poppins(fontSize: 20, fontWeight: FontWeight.bold),
+          ),
+          content: Text(
+            'Your wallet balance is ₹${credit.toStringAsFixed(2)}',
+            style: GoogleFonts.poppins(fontSize: 16),
+          ),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: Text('Close', style: GoogleFonts.poppins(fontSize: 16)),
             ),
-            content: Text(
-              'Your wallet balance is ₹${creditNote.toStringAsFixed(2)}',
-              style: GoogleFonts.poppins(fontSize: 16),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Close',
-                  style: GoogleFonts.poppins(fontSize: 16),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    } else {
-      // Show an error message if userProfileData is null
-      showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(
-              'Error',
-              style: GoogleFonts.poppins(
-                  fontSize: 20, fontWeight: FontWeight.bold),
-            ),
-            content: Text(
-              'Unable to fetch wallet balance. Please try again later.',
-              style: GoogleFonts.poppins(fontSize: 16),
-            ),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                child: Text(
-                  'Close',
-                  style: GoogleFonts.poppins(fontSize: 16),
-                ),
-              ),
-            ],
-          );
-        },
-      );
-    }
+          ],
+        );
+      },
+    );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   String firstLetter = userProfileData!['firstName'].isNotEmpty
-  //       ? userProfileData!['firstName'][0].toUpperCase()
-  //       : '';
-  //   return Scaffold(
-  //     key: scaffoldKey,
-  //     appBar: AppBar(
-  //       elevation: 0,
-  //       backgroundColor: Colors.green,
-  //       leading: Padding(
-  //         padding: const EdgeInsets.fromLTRB(10, 8, 8, 8),
-  //         child: GestureDetector(
-  //           onTap: () {
-  //             scaffoldKey.currentState?.openDrawer();
-  //           },
-  //           child: userProfileData?['profilePic'].isNotEmpty
-  //               ? CircleAvatar(
-  //                   radius: 35,
-  //                   backgroundColor: Colors.white,
-  //                   backgroundImage:
-  //                       NetworkImage(userProfileData!['profilePic']))
-  //               : CircleAvatar(
-  //                   radius: 50, // Adjust size as needed
-  //                   backgroundColor: Colors.white, // Customize background color
-  //                   child: Text(
-  //                     userProfileData?['firstName'][0] ??
-  //                         '', // First letter of the name
-  //                     style: TextStyle(
-  //                       color: Colors.black,
-  //                       fontSize: 24,
-  //                       fontWeight: FontWeight.bold,
-  //                     ),
-  //                   ),
-  //                 ),
-  //         ),
-  //       ),
-  //       title: Text(
-  //         'YogaYatra',
-  //         style: GoogleFonts.poppins(
-  //           color: Colors.white,
-  //           fontSize: 25,
-  //           fontWeight: FontWeight.w500,
-  //         ),
-  //       ),
-  //       centerTitle: true,
-  //       actions: [
-  //         IconButton(
-  //           onPressed: () {
-  //             Navigator.push(
-  //               context,
-  //               MaterialPageRoute(builder: (context) => NotificationPage()),
-  //             );
-  //           },
-  //           icon:
-  //               const Icon(Icons.notifications, color: Colors.white, size: 25),
-  //         ),
-  //         IconButton(
-  //           onPressed: _showCreditDialog, // Open the dialog on press
-  //           icon: const Icon(Icons.credit_card,
-  //               color: Colors.white, size: 25), // Credit icon
-  //         ),
-  //       ],
-  //     ),
-  //     drawer: SideMenuScreen(),
-  //     body: TabBarView(
-  //       controller: _tabController,
-  //       children: [
-  //         MyYatrasListScreen(),
-  //         DashboardScreen(),
-  //         ProfilePage(),
-  //       ],
-  //     ),
-  //     bottomNavigationBar: MotionTabBar(
-  //       initialSelectedTab: "My Yatras",
-  //       labels: const ["My Yatras", "All Yatras", "Profile"],
-  //       icons: const [Icons.temple_hindu, Icons.temple_hindu, Icons.person],
-  //       tabSize: 50,
-  //       tabBarHeight: 60,
-  //       textStyle: const TextStyle(
-  //         // fontSize: 14,
-  //         color: Colors.black,
-  //         fontWeight: FontWeight.w500,
-  //       ),
-  //       tabIconColor: Colors.grey,
-  //       tabSelectedColor: Colors.green,
-  //       tabIconSize: 28,
-  //       tabBarColor: Colors.white,
-  //       onTabItemSelected: (int index) {
-  //         setState(() {
-  //           _tabController.index = index;
-  //         });
-  //       },
-  //     ),
-  //   );
-  // }
   @override
   Widget build(BuildContext context) {
-    // Show a loading indicator while user data is being fetched
-    if (userProfileData == null) {
-      return Scaffold(
-        appBar: AppBar(
-          title: const Text("YogaYatra"),
-          backgroundColor: Colors.green,
-          centerTitle: true,
-        ),
-        body: const Center(
-          child: CircularProgressIndicator(color: Colors.green),
-        ),
-      );
-    }
-
-    // Now it's safe to use userProfileData
-    String firstLetter = (userProfileData?['firstName']?.isNotEmpty ?? false)
-        ? userProfileData!['firstName'][0].toUpperCase()
-        : '';
+    String firstLetter = firstName.isNotEmpty ? firstName[0].toUpperCase() : '';
 
     return Scaffold(
       key: scaffoldKey,
@@ -259,15 +82,12 @@ class _HomePageState extends State<HomePage>
         leading: Padding(
           padding: const EdgeInsets.fromLTRB(10, 8, 8, 8),
           child: GestureDetector(
-            onTap: () {
-              scaffoldKey.currentState?.openDrawer();
-            },
-            child: (userProfileData?['profilePic']?.isNotEmpty ?? false)
+            onTap: () => scaffoldKey.currentState?.openDrawer(),
+            child: profilePic.isNotEmpty
                 ? CircleAvatar(
                     radius: 35,
                     backgroundColor: Colors.white,
-                    backgroundImage:
-                        NetworkImage(userProfileData!['profilePic']),
+                    backgroundImage: NetworkImage(profilePic),
                   )
                 : CircleAvatar(
                     radius: 50,
@@ -294,12 +114,10 @@ class _HomePageState extends State<HomePage>
         centerTitle: true,
         actions: [
           IconButton(
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => NotificationPage()),
-              );
-            },
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => NotificationPage()),
+            ),
             icon:
                 const Icon(Icons.notifications, color: Colors.white, size: 25),
           ),
@@ -309,19 +127,19 @@ class _HomePageState extends State<HomePage>
           ),
         ],
       ),
-      drawer: SideMenuScreen(),
+      drawer: const SideMenuScreen(),
       body: TabBarView(
         controller: _tabController,
         children: [
-          MyYatrasListScreen(),
-          DashboardScreen(),
-          ProfilePage(),
+          const MyYatrasListScreen(),
+          AllYatrasList(),
+          const AdvstScreen(),
         ],
       ),
       bottomNavigationBar: MotionTabBar(
         initialSelectedTab: "My Yatras",
-        labels: const ["My Yatras", "All Yatras", "Profile"],
-        icons: const [Icons.temple_hindu, Icons.temple_hindu, Icons.person],
+        labels: const ["My Yatras", "All Yatras", "Advst"],
+        icons: const [Icons.temple_hindu, Icons.temple_hindu, Icons.campaign],
         tabSize: 50,
         tabBarHeight: 60,
         textStyle: const TextStyle(
@@ -333,9 +151,7 @@ class _HomePageState extends State<HomePage>
         tabIconSize: 28,
         tabBarColor: Colors.white,
         onTabItemSelected: (int index) {
-          setState(() {
-            _tabController.index = index;
-          });
+          setState(() => _tabController.index = index);
         },
       ),
     );

@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:yogayatra/dashboard/landingScreen.dart';
+import 'package:yogayatra/oldscreens/landingScreen.dart';
 import 'package:yogayatra/sidemenu/profileScreen.dart';
 import 'package:yogayatra/yatrafullDetails/yatraDetailsScreen.dart';
 import 'package:yogayatra/sharedpreferences/sharedpreferances.dart';

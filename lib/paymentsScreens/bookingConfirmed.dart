@@ -3,7 +3,7 @@ import 'dart:core';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
-import 'package:yogayatra/dashboard/dashboardScreen.dart';
+import 'package:yogayatra/dashboard/allyatraslist.dart';
 
 class BookingConfirmed extends StatefulWidget {
   final paymentId;
@@ -350,7 +350,7 @@ class _BookingConfirmedState extends State<BookingConfirmed> {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                            builder: (context) => DashboardScreen(),
+                            builder: (context) => AllYatrasList(),
                           ));
                     },
                     style: ElevatedButton.styleFrom(
