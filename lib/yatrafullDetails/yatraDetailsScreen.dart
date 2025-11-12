@@ -31,6 +31,7 @@ import 'package:intl/intl.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:flutter_quill/flutter_quill.dart';
+import 'package:yogayatra/yatrafullDetails/viewYatrispage.dart';
 
 class YatraDetailsScreen extends StatefulWidget {
   final Map<String, dynamic> yatraData;
@@ -1004,7 +1005,16 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
                                 backgroundColor: Colors.green,
                                 padding: EdgeInsets.zero,
                               ),
-                              onPressed: () {},
+                              onPressed: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => ViewYatrisPage(
+                                      yatraId: widget.yatraId,
+                                    ),
+                                  ),
+                                );
+                              },
                               child: Center(
                                 child: Column(
                                   mainAxisAlignment: MainAxisAlignment.center,
