@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:hexcolor/hexcolor.dart';
 import 'package:yogayatra/loginscrenns/loginscreen.dart';
 import 'package:yogayatra/sharedpreferences/sharedpreferances.dart';
+import 'package:yogayatra/sidemenu/donations_screen.dart';
 import 'package:yogayatra/sidemenu/profileScreen.dart';
 import 'package:yogayatra/sidemenu/settingsPage.dart';
 
@@ -98,7 +99,7 @@ class _SideMenuScreenState extends State<SideMenuScreen> {
           ListTile(
             leading: const Icon(Icons.volunteer_activism, color: Colors.green),
             title: Text(
-              'Doantions',
+              'Donations',
               style: GoogleFonts.poppins(
                 fontSize: 16,
                 fontWeight: FontWeight.w500,
@@ -106,7 +107,7 @@ class _SideMenuScreenState extends State<SideMenuScreen> {
             ),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ProfilePage()),
+              MaterialPageRoute(builder: (context) => const DonationsScreen()),
             ),
           ),
           ListTile(

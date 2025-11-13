@@ -39,13 +39,32 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
         timeInSecForIosWeb: 5);
   }
 
-  void openCheckout() {
+  // void openCheckout() {
+  //   var options = {
+  //     'key': 'rzp_test_RZa3mGbco9w4Ms',
+  //     'amount': _getDueAmountInPaise(),
+  //     'name': 'YogaYatra',
+  //     'description': 'Test Payment',
+  //     'prefill': {'contact': '1234567890', 'email': 'test@example.com'},
+  //   };
+
+  //   try {
+  //     _razorpay?.open(options);
+  //   } catch (e) {
+  //     debugPrint('Error: ${e.toString()}');
+  //   }
+  // }
+
+  void openCheckout(double amount) {
     var options = {
       'key': 'rzp_test_RZa3mGbco9w4Ms',
-      'amount': _getDueAmountInPaise(),
+      'amount': (amount * 100).toInt(),
       'name': 'YogaYatra',
-      'description': 'Test Payment',
-      'prefill': {'contact': '1234567890', 'email': 'test@example.com'},
+      'description': 'Custom Payment',
+      'prefill': {
+        'contact': '1234567890',
+        'email': 'test@example.com',
+      },
     };
 
     try {
@@ -169,6 +188,9 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                     ),
                   const SizedBox(height: 10),
                   ...transactions.map((txn) => _transactionCard(txn)).toList(),
+                  SizedBox(
+                    height: 50,
+                  )
                 ],
               ),
             ),
@@ -187,7 +209,12 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                     elevation: 4,
                   ),
                   onPressed: () {
-                    openCheckout();
+                    final due = double.tryParse(
+                            matchedTraveller?['dueAmount']?.toString() ??
+                                '0') ??
+                        0.0;
+
+                    showAmountDialog(due);
                   },
                   child: Text(
                     "Pay Now",
@@ -267,7 +294,7 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
           ),
           child: InkWell(
             borderRadius: BorderRadius.circular(15),
-            onTap: () => _isExpanded.value = !expanded,
+            // onTap: () => _isExpanded.value = !expanded,
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
@@ -309,75 +336,213 @@ class _PaymentDetailsScreenState extends State<PaymentDetailsScreen> {
                       ),
                     ],
                   ),
-                  if (expanded) ...[
-                    Divider(
-                        thickness: 1, height: 20, color: Colors.grey.shade300),
-                    _paymentRow(
-                      "Receipt Date:",
-                      _formatDate(txn['transcationRegister'] ?? 'N/A'),
-                    ),
-                    _paymentRow("Receipt No:", txn['receiptNumber'] ?? 'N/A'),
-                    _paymentRow("Payment Mode:", txn['paymentType'] ?? 'N/A'),
-                    _paymentRow("Total Amount:",
-                        formatAmount(txn['totalAmount'] ?? '0')),
-                    _paymentRow(
-                        "Paid Amount:", formatAmount(txn['paidAmount'] ?? '0')),
-                    _paymentRow(
-                        "Due Amount:", formatAmount(txn['dueAmount'] ?? '0')),
-                    if ((txn['notes'] ?? '').isNotEmpty)
-                      _paymentRow("Notes:", txn['notes']),
-                    const SizedBox(height: 10),
-                    if (txn['images'] != null && txn['images'].isNotEmpty)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            "Transcation Images:",
-                            style: GoogleFonts.poppins(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.green,
-                            ),
+                  // if (expanded) ...[
+                  Divider(
+                      thickness: 1, height: 20, color: Colors.grey.shade300),
+                  _paymentRow(
+                    "Receipt Date:",
+                    _formatDate(txn['transcationRegister'] ?? 'N/A'),
+                  ),
+                  _paymentRow("Receipt No:", txn['receiptNumber'] ?? 'N/A'),
+                  _paymentRow("Payment Mode:", txn['paymentType'] ?? 'N/A'),
+                  _paymentRow(
+                      "Total Amount:", formatAmount(txn['totalAmount'] ?? '0')),
+                  _paymentRow(
+                      "Paid Amount:", formatAmount(txn['paidAmount'] ?? '0')),
+                  _paymentRow(
+                      "Due Amount:", formatAmount(txn['dueAmount'] ?? '0')),
+                  if ((txn['notes'] ?? '').isNotEmpty)
+                    _paymentRow("Notes:", txn['notes']),
+                  const SizedBox(height: 10),
+                  if (txn['images'] != null && txn['images'].isNotEmpty)
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Transcation Images:",
+                          style: GoogleFonts.poppins(
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.green,
                           ),
-                          const SizedBox(height: 8),
-                          SizedBox(
-                            height: 80,
-                            child: ListView.builder(
-                              scrollDirection: Axis.horizontal,
-                              itemCount: txn['images'].length,
-                              itemBuilder: (context, index) {
-                                final imgUrl = txn['images'][index];
-                                return Padding(
-                                  padding: const EdgeInsets.only(right: 8.0),
-                                  child: ClipRRect(
-                                    borderRadius: BorderRadius.circular(8),
-                                    child: Image.network(
-                                      imgUrl,
+                        ),
+                        const SizedBox(height: 8),
+                        SizedBox(
+                          height: 80,
+                          child: ListView.builder(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: txn['images'].length,
+                            itemBuilder: (context, index) {
+                              final imgUrl = txn['images'][index];
+                              return Padding(
+                                padding: const EdgeInsets.only(right: 8.0),
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(8),
+                                  child: Image.network(
+                                    imgUrl,
+                                    width: 80,
+                                    height: 80,
+                                    fit: BoxFit.cover,
+                                    errorBuilder:
+                                        (context, error, stackTrace) =>
+                                            Container(
                                       width: 80,
                                       height: 80,
-                                      fit: BoxFit.cover,
-                                      errorBuilder:
-                                          (context, error, stackTrace) =>
-                                              Container(
-                                        width: 80,
-                                        height: 80,
-                                        color: Colors.grey[300],
-                                        child: const Icon(Icons.broken_image,
-                                            color: Colors.grey),
-                                      ),
+                                      color: Colors.grey[300],
+                                      child: const Icon(Icons.broken_image,
+                                          color: Colors.grey),
                                     ),
                                   ),
-                                );
-                              },
-                            ),
+                                ),
+                              );
+                            },
                           ),
-                        ],
-                      ),
-                  ],
+                        ),
+                      ],
+                    ),
                 ],
+                // ],
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void showAmountDialog(double dueAmount) {
+    final TextEditingController amountController = TextEditingController();
+    String? errorMessage;
+
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return AlertDialog(
+              backgroundColor: Colors.white,
+              title: Text(
+                "Enter Payment Amount",
+                style: GoogleFonts.poppins(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  color: Colors.black,
+                ),
+              ),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    "Due Amount: ${formatAmount(dueAmount.toStringAsFixed(2))}",
+                    style: TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.green,
+                    ),
+                  ),
+                  SizedBox(height: 10),
+                  TextField(
+                    controller: amountController,
+                    keyboardType: TextInputType.number,
+                    decoration: InputDecoration(
+                      hintText: "Enter amount",
+                      errorText: errorMessage,
+                      filled: true,
+                      fillColor: HexColor("#F4F8F5"),
+                      contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 12, vertical: 14),
+                      enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide:
+                            BorderSide(color: Colors.green.shade200, width: 1),
+                      ),
+                      focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                        borderSide: BorderSide(
+                            color: Colors.green.shade300, width: 1.3),
+                      ),
+                    ),
+                    style: GoogleFonts.poppins(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w400,
+                      color: Colors.black,
+                    ),
+                    onChanged: (value) {
+                      final entered = double.tryParse(value) ?? 0;
+
+                      if (entered > dueAmount) {
+                        setState(() {
+                          errorMessage =
+                              "Amount cannot be greater than due amount (₹$dueAmount)";
+                        });
+                      } else {
+                        setState(() {
+                          errorMessage = null;
+                        });
+                      }
+                    },
+                  ),
+                ],
+              ),
+              actions: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    OutlinedButton(
+                      onPressed: () => Navigator.pop(context),
+                      style: OutlinedButton.styleFrom(
+                        side: const BorderSide(color: Colors.green),
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Cancel',
+                        style:
+                            TextStyle(color: Colors.green, fontFamily: "inter"),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        final enteredAmount =
+                            double.tryParse(amountController.text) ?? 0;
+
+                        if (enteredAmount <= 0) {
+                          setState(() {
+                            errorMessage = "Please enter valid amount";
+                          });
+                          return;
+                        }
+
+                        if (enteredAmount > dueAmount) {
+                          setState(() {
+                            errorMessage =
+                                "Amount cannot be greater than due amount";
+                          });
+                          return;
+                        }
+
+                        Navigator.pop(context);
+                        openCheckout(enteredAmount);
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Text(
+                        'Submit',
+                        style:
+                            TextStyle(color: Colors.white, fontFamily: "inter"),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            );
+          },
         );
       },
     );

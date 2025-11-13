@@ -244,24 +244,38 @@ class _YatraDetailsScreenState extends State<YatraDetailsScreen> {
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
-        leading: const BackButton(color: Colors.white),
-        backgroundColor: Colors.green,
         elevation: 0,
+        backgroundColor: Colors.green,
+        automaticallyImplyLeading: false,
+        bottom: PreferredSize(
+          preferredSize: const Size.fromHeight(1),
+          child: Container(color: Colors.grey.shade300, height: 1),
+        ),
+        leading: IconButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          icon: Icon(
+            Icons.arrow_back_ios_new,
+            size: 22,
+            color: Colors.white,
+          ),
+        ),
         title: Text(
           'Yatra Details',
           style: GoogleFonts.poppins(
             color: Colors.white,
+            fontWeight: FontWeight.w500,
             fontSize: 20,
-            fontWeight: FontWeight.w600,
           ),
         ),
+        centerTitle: true,
         actions: [
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.chat, color: Colors.white),
           ),
         ],
-        centerTitle: true,
       ),
       body: SafeArea(
         child: SingleChildScrollView(
