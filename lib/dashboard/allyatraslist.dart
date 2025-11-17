@@ -23,6 +23,31 @@ class _AllYatrasListState extends State<AllYatrasList> {
     _fetchYatrasForLoggedInUser();
   }
 
+  // Future<void> _fetchYatrasForLoggedInUser() async {
+  //   await SharedPrefServices.init();
+
+  //   setState(() => _loading = true);
+
+  //   try {
+  //     Query query = _firestore.collection('yatras');
+
+  //     if (_selectedStatus != null && _selectedStatus!.isNotEmpty) {
+  //       query = query.where('status', isEqualTo: _selectedStatus);
+  //     }
+
+  //     QuerySnapshot snapshot = await query.get();
+
+  //     setState(() {
+  //       _yatraDetails = snapshot.docs
+  //           .map((doc) => doc.data() as Map<String, dynamic>)
+  //           .toList();
+  //       _loading = false;
+  //     });
+  //   } catch (e) {
+  //     debugPrint("Error fetching yatras: $e");
+  //     setState(() => _loading = false);
+  //   }
+  // }
   Future<void> _fetchYatrasForLoggedInUser() async {
     await SharedPrefServices.init();
 
@@ -32,7 +57,17 @@ class _AllYatrasListState extends State<AllYatrasList> {
       Query query = _firestore.collection('yatras');
 
       if (_selectedStatus != null && _selectedStatus!.isNotEmpty) {
-        query = query.where('status', isEqualTo: _selectedStatus);
+        // Handle "New" as multiple statuses
+        if (_selectedStatus == 'New') {
+          query = query.where('status', whereIn: [
+            'New',
+            'Registration Open',
+            'Registration Closed',
+          ]);
+        } else {
+          // For other statuses, use single filter
+          query = query.where('status', isEqualTo: _selectedStatus);
+        }
       }
 
       QuerySnapshot snapshot = await query.get();
@@ -406,14 +441,21 @@ class _AllYatrasListState extends State<AllYatrasList> {
   Widget _buildFilterButton() {
     return PopupMenuButton<String>(
       icon: const Icon(Icons.filter_list, color: Colors.green),
+      // onSelected: (value) {
+      //   setState(() {
+      //     _selectedStatus = value == 'All' ? null : value;
+      //   });
+      // },
       onSelected: (value) {
         setState(() {
           _selectedStatus = value == 'All' ? null : value;
         });
+        _fetchYatrasForLoggedInUser();
       },
+
       itemBuilder: (context) => [
         const PopupMenuItem(value: 'All', child: Text('All')),
-        const PopupMenuItem(value: 'Draft', child: Text('Draft')),
+        // const PopupMenuItem(value: 'Draft', child: Text('Draft')),
         const PopupMenuItem(value: 'New', child: Text('New')),
         const PopupMenuItem(
             value: 'Registration Open', child: Text('Registration Open')),
